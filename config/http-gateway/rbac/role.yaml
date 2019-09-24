@@ -1,0 +1,15 @@
+
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  name: http-gateway-role
+rules:
+- apiGroups:
+  - streaming.projectriff.io
+  resources:
+  - streams
+  verbs:
+  - get
+  - watch

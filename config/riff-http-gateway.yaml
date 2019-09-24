@@ -1,0 +1,54 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  creationTimestamp: null
+  labels:
+    component: streaming.projectriff.io
+  name: riff-streaming-http-gateway-role
+rules:
+- apiGroups:
+  - streaming.projectriff.io
+  resources:
+  - streams
+  verbs:
+  - get
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  labels:
+    component: streaming.projectriff.io
+  name: riff-streaming-http-gateway-rolebinding
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: riff-streaming-http-gateway-role
+subjects:
+- kind: ServiceAccount
+  name: default
+  namespace: riff-system
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    component: streaming.projectriff.io
+    control-plane: http-gateway
+  name: riff-streaming-http-gateway
+  namespace: riff-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: streaming.projectriff.io
+      control-plane: http-gateway
+  template:
+    metadata:
+      labels:
+        component: streaming.projectriff.io
+        control-plane: http-gateway
+    spec:
+      containers:
+      - image: github.com/projectriff/http-gateway/cmd
+        name: http-gateway
