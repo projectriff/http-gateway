@@ -64,7 +64,7 @@ func main() {
 	}()
 	fmt.Println("Waiting for caches to synch")
 	cache.WaitForCacheSync(stopCh)
-	fmt.Println("Caches synhed, starting http server")
+	fmt.Println("Caches synched, starting http server")
 
 	gw := gateway.NewGateway(cache)
 	if err := gw.Run(stopCh); err != nil {
