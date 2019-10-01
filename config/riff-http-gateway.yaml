@@ -29,6 +29,25 @@ subjects:
   name: default
   namespace: riff-system
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: streaming.projectriff.io
+    control-plane: http-gateway
+  name: riff-streaming-http-gateway
+  namespace: riff-system
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    component: streaming.projectriff.io
+    control-plane: http-gateway
+  sessionAffinity: None
+  type: ClusterIP
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -52,3 +71,5 @@ spec:
       containers:
       - image: github.com/projectriff/http-gateway/cmd
         name: http-gateway
+        ports:
+          - containerPort: 8080
