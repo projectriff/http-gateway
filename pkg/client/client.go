@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	"strings"
 	"time"
 
 	"github.com/golang/protobuf/proto"
@@ -68,7 +69,7 @@ func NewStreamClient(gateway string, topic string, acceptableContentType string)
 
 func (lc *StreamClient) Publish(ctx context.Context, payload io.Reader, key io.Reader, contentType string, headers map[string]string) (PublishResult, error) {
 	m := serialization.Message{}
-	if lc.acceptableContentType != contentType { // TODO support smarter compatibility (eg subtypes)
+	if !strings.HasPrefix(contentType, lc.acceptableContentType) { // TODO support smarter compatibility (eg subtypes)
 		return PublishResult{}, fmt.Errorf("contentType %q not compatible with expected contentType %q", contentType, lc.acceptableContentType)
 	}
 	m.ContentType = contentType
