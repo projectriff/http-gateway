@@ -69,7 +69,7 @@ func NewStreamClient(gateway string, topic string, acceptableContentType string)
 
 func (lc *StreamClient) Publish(ctx context.Context, payload io.Reader, key io.Reader, contentType string, headers map[string]string) (PublishResult, error) {
 	m := serialization.Message{}
-	if !strings.HasPrefix(contentType, lc.acceptableContentType) { // TODO support smarter compatibility (eg subtypes)
+	if chopContentType(contentType) != chopContentType(lc.acceptableContentType) { // TODO support smarter compatibility (eg subtypes)
 		return PublishResult{}, fmt.Errorf("contentType %q not compatible with expected contentType %q", contentType, lc.acceptableContentType)
 	}
 	m.ContentType = contentType
@@ -103,6 +103,10 @@ func (lc *StreamClient) Publish(ctx context.Context, payload io.Reader, key io.R
 	} else {
 		return PublishResult{Offset: publishReply.Offset, Partition: publishReply.Partition}, nil
 	}
+}
+
+func chopContentType(contentType string) string {
+	return strings.Split(contentType, ";")[0]
 }
 
 // Close cleans up underlying resources used by this client. The client is then unable to publish.
