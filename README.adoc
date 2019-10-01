@@ -1,0 +1,23 @@
+= HTTP Gateway
+
+This component allows the ingestion of messages over http into riff streams.
+
+## Development
+To create a deployment for the gateway, run
+[source, bash]
+----
+make all
+ko apply -f config/
+----
+
+Then, add a kubernetes service for the deployment created in `riff-system` as desired.
+
+## Usage
+This component accepts `POST` requests to the following URL patterns:
+----
+/<namespace>/<stream-name>
+----
+
+The body of the http request will be converted to the message payload,
+using the http `Content-Type` header as the message content type. That MIME type
+must be compatible (currently, strictly equal) as the stream declared `contentType`.
