@@ -7,7 +7,6 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: http-gateway
-  namespace: system
   labels:
     control-plane: http-gateway
 spec:
@@ -23,3 +22,21 @@ spec:
       containers:
       - name: http-gateway
         image: github.com/projectriff/http-gateway/cmd
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    component: streaming.projectriff.io
+    control-plane: http-gateway
+  name: http-gateway
+spec:
+  ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+  selector:
+    component: streaming.projectriff.io
+    control-plane: http-gateway
+  sessionAffinity: None
+  type: ClusterIP

@@ -39,9 +39,9 @@ metadata:
   namespace: riff-system
 spec:
   ports:
-    - port: 80
-      protocol: TCP
-      targetPort: 8080
+  - port: 80
+    protocol: TCP
+    targetPort: 8080
   selector:
     component: streaming.projectriff.io
     control-plane: http-gateway
@@ -71,5 +71,3 @@ spec:
       containers:
       - image: github.com/projectriff/http-gateway/cmd
         name: http-gateway
-        ports:
-          - containerPort: 8080
