@@ -1,0 +1,26 @@
+name: CI
+
+on: [push, pull_request]
+
+jobs:
+
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: '1.13'
+      - name: Install kustomize
+        run: |
+          opsys=`go env GOOS`
+          curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases/latest |\
+            grep browser_download |\
+            grep $opsys |\
+            cut -d '"' -f 4 |\
+            xargs curl -O -L
+          mv kustomize_*_${opsys}_amd64 kustomize
+          chmod u+x kustomize
+          sudo mv kustomize /usr/local/bin/
+      - name: Build & Test
+        run: make all
