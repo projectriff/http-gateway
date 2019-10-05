@@ -28,7 +28,7 @@ prepare: fmt vet manifests ## Create all generated and scaffolded files
 
 # Generate manifests e.g. CRD, RBAC etc.
 .PHONY: manifests
-manifests:
+manifests: controller-gen
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=http-gateway-role \
 		paths="./cmd/...;./pkg/..." \
 		output:rbac:artifacts:config=./config/http-gateway/rbac
