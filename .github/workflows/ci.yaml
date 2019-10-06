@@ -24,3 +24,70 @@ jobs:
           sudo mv kustomize /usr/local/bin/
       - name: Build & Test
         run: make all
+
+  stage:
+    needs: test
+    if: |
+      github.event_name == 'push' && (
+        github.ref == 'refs/heads/master' || (
+          startsWith(github.ref, 'refs/heads/v') && endsWith(github.ref, 'x')
+        )
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-go@v1
+        with:
+          go-version: '1.13'
+      - name: Install kustomize
+        run: |
+          opsys=`go env GOOS`
+          curl -s https://api.github.com/repos/kubernetes-sigs/kustomize/releases/latest |\
+            grep browser_download |\
+            grep $opsys |\
+            cut -d '"' -f 4 |\
+            xargs curl -O -L
+          mv kustomize_*_${opsys}_amd64 kustomize
+          chmod u+x kustomize
+          sudo mv kustomize /usr/local/bin/
+      - name: Install ko
+        run: |
+          go get github.com/google/ko/cmd/ko
+          echo "##[add-path]$(go env GOPATH)/bin"
+        env:
+          GO111MODULE: "off"
+      - name: gcloud auth
+        run: |
+          gcloud config set project cf-spring-pfs-eng
+          gcloud config set compute/region us-central1
+          gcloud config set compute/zone us-central1-a
+          gcloud config set disable_prompts True
+          gcloud auth activate-service-account --key-file <(echo $GCLOUD_CLIENT_SECRET | base64 --decode)
+          gcloud auth configure-docker
+        env:
+          GCLOUD_CLIENT_SECRET: ${{ secrets.GCLOUD_CLIENT_SECRET }}
+      - name: Stage artifacts
+        run: .github/workflows/stage.sh
+        env:
+          KO_DOCKER_REPO: gcr.io/projectriff/http-gateway
+
+# TODO add tests
+  publish:
+    needs: stage
+    if: |
+      github.event_name == 'push' && (
+        github.ref == 'refs/heads/master' || (
+          startsWith(github.ref, 'refs/heads/v') && endsWith(github.ref, 'x')
+        )
+      )
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v1
+      - name: gcloud auth
+        run: |
+          gcloud config set disable_prompts True
+          gcloud auth activate-service-account --key-file <(echo $GCLOUD_CLIENT_SECRET | base64 --decode)
+        env:
+          GCLOUD_CLIENT_SECRET: ${{ secrets.GCLOUD_CLIENT_SECRET }}
+      - name: Publish artifacts
+        run: .github/workflows/publish.sh ${{ github.ref }}
