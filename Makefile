@@ -1,3 +1,9 @@
+# Get the currently used golang install path (in GOPATH/bin, unless GOBIN is set)
+ifeq (,$(shell go env GOBIN))
+GOBIN=$(shell go env GOPATH)/bin
+else
+GOBIN=$(shell go env GOBIN)
+endif
 
 .PHONY: all
 all: prepare test
@@ -22,7 +28,7 @@ prepare: fmt vet manifests ## Create all generated and scaffolded files
 
 # Generate manifests e.g. CRD, RBAC etc.
 .PHONY: manifests
-manifests:
+manifests: controller-gen
 	$(CONTROLLER_GEN) $(CRD_OPTIONS) rbac:roleName=http-gateway-role \
 		paths="./cmd/...;./pkg/..." \
 		output:rbac:artifacts:config=./config/http-gateway/rbac
