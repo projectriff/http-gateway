@@ -48,7 +48,7 @@ controller-gen:
 ifeq (, $(shell which controller-gen))
 	# avoid go.* mutations from go get
 	cp go.mod go.mod~ && cp go.sum go.sum~
-	go get sigs.k8s.io/controller-tools/cmd/controller-gen@v0.2.0
+	go get sigs.k8s.io/controller-tools/cmd/controller-gen@v0.2.2
 	mv go.mod~ go.mod && mv go.sum~ go.sum
 CONTROLLER_GEN=$(GOBIN)/controller-gen
 else
