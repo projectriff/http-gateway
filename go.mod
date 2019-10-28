@@ -4,9 +4,9 @@ go 1.13
 
 require (
 	github.com/golang/protobuf v1.3.2
-	github.com/projectriff/system v0.0.0-20190920204026-a1e37a14885b
+	github.com/projectriff/system v0.0.0-20191028162341-a443454b9bb3
 	google.golang.org/grpc v1.24.0
-	k8s.io/apimachinery v0.0.0-20190404173353-6a84e37a896d
-	k8s.io/client-go v11.0.1-0.20190409021438-1a26190bd76a+incompatible
-	sigs.k8s.io/controller-runtime v0.2.0
+	k8s.io/apimachinery v0.0.0-20190817020851-f2f3a405f61d
+	k8s.io/client-go v0.0.0-20190918200256-06eb1244587a
+	sigs.k8s.io/controller-runtime v0.3.0
 )
