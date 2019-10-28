@@ -3,7 +3,7 @@ module github.com/projectriff/http-gateway
 go 1.13
 
 require (
-	github.com/golang/protobuf v1.3.1
+	github.com/golang/protobuf v1.3.2
 	github.com/projectriff/system v0.0.0-20190920204026-a1e37a14885b
 	google.golang.org/grpc v1.24.0
 	k8s.io/apimachinery v0.0.0-20190404173353-6a84e37a896d
