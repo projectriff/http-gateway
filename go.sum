@@ -148,6 +148,10 @@ github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINE
 github.com/pmezard/go-difflib v1.0.0 h1:4DBwDE0NGyQoBHbLQYPwSUPoCMWR5BEzIk/f1lZbAQM=
 github.com/pmezard/go-difflib v1.0.0/go.mod h1:iKH77koFhYxTK1pcRnkKkqfTogsbg7gZNVY4sRDYZ/4=
 github.com/pquerna/cachecontrol v0.0.0-20171018203845-0dec1b30a021/go.mod h1:prYjPmNq4d1NPVmpShWobRqXY3q7Vp+80DqgxxUrUIA=
+github.com/projectriff/stream-client-go v0.0.0-20191031174959-db831cd67004 h1:NJYx36TGt2/Kdz4GeHEECc8wsrnBKWa0GAkFEqvmj0E=
+github.com/projectriff/stream-client-go v0.0.0-20191031174959-db831cd67004/go.mod h1:Ig4KvbNZA63G7UxwOKhWJO5hULLAkBDqZRTfocNe8gc=
+github.com/projectriff/stream-client-go v0.0.0-20191104095537-16431b42d766 h1:cL0OrN6FAMMSrjC0+Tq+u7LbW6xLoXZvmx2SwERKzEI=
+github.com/projectriff/stream-client-go v0.0.0-20191104095537-16431b42d766/go.mod h1:Ig4KvbNZA63G7UxwOKhWJO5hULLAkBDqZRTfocNe8gc=
 github.com/projectriff/system v0.0.0-20191028162341-a443454b9bb3 h1:+gHrais+5mNZx5sEdIkDvcBBsticV9uYsywWGN8T60Y=
 github.com/projectriff/system v0.0.0-20191028162341-a443454b9bb3/go.mod h1:DK9xSIjh6rrAfnklBLfabUJHXewaWRvvpl7qFYajUhU=
 github.com/prometheus/client_golang v0.9.1/go.mod h1:7SWBe2y4D6OKWSNQJUaRYU/AaXPKyh/dDVn+NZz0KFw=
