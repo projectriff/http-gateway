@@ -8,18 +8,12 @@ endif
 .PHONY: all
 all: prepare test
 
-pkg/serialization/riff-serialization.pb.go: riff-serialization.proto
-	protoc -I . riff-serialization.proto --go_out=plugins=grpc:pkg/serialization
-
-pkg/liiklus/LiiklusService.pb.go: LiiklusService.proto
-	protoc -I . LiiklusService.proto --go_out=plugins=grpc:pkg/liiklus
-
 .PHONY: test
 test: fmt vet manifests ## Run tests
 	go test ./... -coverprofile cover.out
 
 .PHONY: compile
-compile: prepare ko pkg/serialization/riff-serialization.pb.go pkg/liiklus/LiiklusService.pb.go ## Compile target binaries
+compile: prepare ko ## Compile target binaries
 	$(KO) resolve -L -f config/ > /dev/null
 
 .PHONY: prepare
@@ -36,7 +30,7 @@ manifests: controller-gen
 # Run go fmt against code
 .PHONY: fmt
 fmt: goimports
-	$(GOIMPORTS) --local github.com/projectriff/system -w pkg/ cmd/
+	$(GOIMPORTS) -w --local github.com/projectriff pkg/ cmd/
 
 # Run go vet against code
 .PHONY: vet

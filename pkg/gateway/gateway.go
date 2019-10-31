@@ -25,11 +25,11 @@ import (
 	"sync"
 	"time"
 
-	sclient "github.com/projectriff/http-gateway/pkg/client"
 	"k8s.io/apimachinery/pkg/types"
-	client2 "sigs.k8s.io/controller-runtime/pkg/client"
+	k8sclient "sigs.k8s.io/controller-runtime/pkg/client"
 
-	alpha1 "github.com/projectriff/system/pkg/apis/streaming/v1alpha1"
+	sclient "github.com/projectriff/stream-client-go"
+	streaming "github.com/projectriff/system/pkg/apis/streaming/v1alpha1"
 )
 
 const mimeTypeOctetStream = "application/octet-stream"
@@ -38,8 +38,8 @@ const leaseDuration = time.Duration(1 * time.Minute)
 
 type Gateway struct {
 	server        *http.Server
-	k8sClient     client2.Reader
-	streamClients map[alpha1.StreamAddress]*lease
+	k8sClient     k8sclient.Reader
+	streamClients map[streaming.StreamAddress]*lease
 	mutex         sync.Mutex
 }
 
@@ -48,10 +48,10 @@ type lease struct {
 	expiry time.Time
 }
 
-func NewGateway(reader client2.Reader) *Gateway {
+func NewGateway(reader k8sclient.Reader) *Gateway {
 	g := Gateway{
 		k8sClient:     reader,
-		streamClients: make(map[alpha1.StreamAddress]*lease),
+		streamClients: make(map[streaming.StreamAddress]*lease),
 	}
 
 	m := http.NewServeMux()
@@ -88,7 +88,7 @@ func (g *Gateway) ingest(w http.ResponseWriter, r *http.Request) {
 	}
 
 	namespacedName := types.NamespacedName{Namespace: parts[0], Name: parts[1]}
-	stream := alpha1.Stream{}
+	stream := streaming.Stream{}
 	if err := g.k8sClient.Get(context.Background(), namespacedName, &stream); err != nil {
 		w.WriteHeader(http.StatusNotFound)
 		_, _ = w.Write([]byte(fmt.Sprintf("Stream %s not found", namespacedName)))
@@ -128,7 +128,7 @@ func (g *Gateway) Shutdown(ctx context.Context) error {
 	return err
 }
 
-func (g *Gateway) lookupClient(stream *alpha1.Stream) (*sclient.StreamClient, error) {
+func (g *Gateway) lookupClient(stream *streaming.Stream) (*sclient.StreamClient, error) {
 	g.mutex.Lock()
 	defer g.mutex.Unlock()
 	defer g.purgeClients()
