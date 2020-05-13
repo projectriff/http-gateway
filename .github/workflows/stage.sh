@@ -15,4 +15,4 @@ echo ""
 echo "# Stage riff http-gateway"
 echo ""
 ko resolve -P -t ${slug} -f config/riff-http-gateway.yaml > bin/riff-http-gateway.yaml
-gsutil cp -a public-read bin/riff-http-gateway.yaml gs://projectriff/riff-http-gateway/snapshots/riff-http-gateway-${slug}.yaml
+gsutil cp bin/riff-http-gateway.yaml gs://projectriff/riff-http-gateway/snapshots/riff-http-gateway-${slug}.yaml
